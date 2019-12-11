@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import pl.wylezek.petclinic.petservice.exceptions.custom.EmptyEntityListException;
+import pl.wylezek.petclinic.petservice.exceptions.custom.EntityAlreadyExistException;
 import pl.wylezek.petclinic.petservice.exceptions.custom.NotFoundEntityException;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 
 @ControllerAdvice
@@ -70,7 +73,29 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(ApiError.builder()
                 .status(HttpStatus.NOT_FOUND)
                 .timestamp(LocalDateTime.now())
-                .message(ex.getMessage()).build());
+                .message(ex.getMessage())
+                .errorMessage(ex.getLocalizedMessage())
+                .build());
+    }
+
+    @ExceptionHandler(EmptyEntityListException.class)
+    protected ResponseEntity<Object> handleEmptyEntityListException(RuntimeException ex) {
+        return buildResponseEntity(ApiError.builder()
+                .status(HttpStatus.NOT_FOUND)
+                .timestamp(LocalDateTime.now())
+                .message(ex.getMessage())
+                .errorMessage(ex.getLocalizedMessage())
+                .build());
+    }
+
+    @ExceptionHandler(EntityAlreadyExistException.class)
+    protected ResponseEntity<Object> handleEntityAlreadyExistException(RuntimeException ex) {
+        return buildResponseEntity(ApiError.builder()
+                .status(HttpStatus.CONFLICT)
+                .timestamp(LocalDateTime.now())
+                .message(ex.getMessage())
+                .errorMessage(ex.getLocalizedMessage())
+                .build());
     }
 
     private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
