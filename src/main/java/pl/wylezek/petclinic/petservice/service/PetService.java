@@ -20,7 +20,7 @@ public class PetService {
         return this.petRepository.findById(id).orElseThrow(() -> new NotFoundEntityException(Pet.class));
     }
 
-    public List<Pet> getPetByCategory(String categoryName) {
+    public List<Pet> getPetsByCategory(String categoryName) {
         return this.petRepository.getByCategory_Name(categoryName);
     }
 
