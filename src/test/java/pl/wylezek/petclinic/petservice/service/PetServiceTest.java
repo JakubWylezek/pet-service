@@ -137,10 +137,12 @@ class PetServiceTest {
 
     @Test
     void deletePetShouldThrowNotFoundEntityException() {
+        //given
         Pet temp = new Pet();
         temp.setId(3L);
         //when
         when(petRepository.findById(3L)).thenReturn(Optional.empty());
+        //then
         assertThrows(NotFoundEntityException.class, () -> petService.deletePet(temp));
     }
 

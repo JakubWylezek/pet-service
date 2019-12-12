@@ -1,6 +1,8 @@
 package pl.wylezek.petclinic.petservice.service;
 
 import org.springframework.stereotype.Service;
+import pl.wylezek.petclinic.petservice.exceptions.custom.EmptyEntityListException;
+import pl.wylezek.petclinic.petservice.exceptions.custom.EntityAlreadyExistException;
 import pl.wylezek.petclinic.petservice.exceptions.custom.NotFoundEntityException;
 import pl.wylezek.petclinic.petservice.model.Category;
 import pl.wylezek.petclinic.petservice.repository.CategoryRepository;
@@ -19,20 +21,34 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
+    public List<Category> getCategoriesWhereParentIsNull() {
+        List<Category> categories = this.categoryRepository.getAllByParentIsNull();
+        if(categories.isEmpty())
+            throw new EmptyEntityListException(Category.class);
+        return categories;
+    }
+
     public Category getCategoryByName(String categoryName) {
         return this.categoryRepository.getCategoryByName(categoryName).orElseThrow(() ->
                 new NotFoundEntityException(Category.class));
     }
 
-    public List<Category> getCategoriesWhereParentIsNull() {
-        return this.categoryRepository.getAllByParentIsNull();
+    public Category saveCategory(Category category) {
+        try {
+            getCategoryByName(category.getName());
+            throw new EntityAlreadyExistException(Category.class);
+        } catch (NotFoundEntityException e) {
+            return this.categoryRepository.save(category);
+        }
     }
 
-    public Category saveCategory(Category category) {
-        return this.categoryRepository.save(category);
+    public Category updateCategory(Category category) {
+        getCategoryByName(category.getName());
+        return categoryRepository.save(category);
     }
 
     public void deleteCategory(Category category) {
+        getCategoryByName(category.getName());
         this.categoryRepository.delete(category);
     }
 

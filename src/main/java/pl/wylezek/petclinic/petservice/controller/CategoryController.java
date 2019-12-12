@@ -46,7 +46,7 @@ public class CategoryController {
 
     @PutMapping(value = "/api/v1/categories")
     public ResponseEntity<Category> updateCategory(Category category) {
-        return new ResponseEntity<>(this.categoryService.saveCategory(category), HttpStatus.OK);
+        return new ResponseEntity<>(this.categoryService.updateCategory(category), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/api/v1/categories")

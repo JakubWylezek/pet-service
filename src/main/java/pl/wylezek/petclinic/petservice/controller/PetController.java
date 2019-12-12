@@ -41,7 +41,7 @@ public class PetController {
 
     @PutMapping(value = "/api/v1/pets")
     public ResponseEntity<Pet> updatePet(@RequestBody Pet pet) {
-        return new ResponseEntity<>(this.petService.savePet(pet), HttpStatus.OK);
+        return new ResponseEntity<>(this.petService.updatePet(pet), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/api/v1/pets")
