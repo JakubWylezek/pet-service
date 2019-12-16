@@ -218,7 +218,7 @@ class PetControllerTest {
     @Test
     void deletePetCorrectlyDeletePet() throws Exception {
         //when
-        when(petService.getPetById(any())).thenReturn(pet1);
+        doNothing().when(petService).deletePet(any());
         //then
         mockMvc.perform(delete("/api/v1/pets")
                 .contentType(MediaType.APPLICATION_JSON)

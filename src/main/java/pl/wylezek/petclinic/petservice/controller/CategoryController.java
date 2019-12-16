@@ -2,12 +2,8 @@ package pl.wylezek.petclinic.petservice.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import pl.wylezek.petclinic.petservice.model.Category;
 import pl.wylezek.petclinic.petservice.service.CategoryService;
 
@@ -15,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
+@EnableWebMvc
 public class CategoryController {
 
     private CategoryService categoryService;
@@ -40,17 +37,17 @@ public class CategoryController {
     }
 
     @PostMapping(value = "/api/v1/categories")
-    public ResponseEntity<Category> addNewCategory(Category category) {
+    public ResponseEntity<Category> addNewCategory(@RequestBody Category category) {
         return new ResponseEntity<>(this.categoryService.saveCategory(category), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/api/v1/categories")
-    public ResponseEntity<Category> updateCategory(Category category) {
+    public ResponseEntity<Category> updateCategory(@RequestBody Category category) {
         return new ResponseEntity<>(this.categoryService.updateCategory(category), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/api/v1/categories")
-    public ResponseEntity deleteCategory(Category category) {
+    public ResponseEntity deleteCategory(@RequestBody Category category) {
         this.categoryService.deleteCategory(category);
         return ResponseEntity.noContent().build();
     }
