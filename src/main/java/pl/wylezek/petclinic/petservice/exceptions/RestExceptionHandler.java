@@ -4,6 +4,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -44,6 +45,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(ApiError.builder()
                 .status(status)
                 .message("Invalid JSON object")
+                .timestamp(LocalDateTime.now())
+                .errorMessage(ex.getLocalizedMessage()).build());
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return buildResponseEntity(ApiError.builder()
+                .status(status)
+                .message("Media type not acceptable")
                 .timestamp(LocalDateTime.now())
                 .errorMessage(ex.getLocalizedMessage()).build());
     }
